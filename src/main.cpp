@@ -2,10 +2,10 @@
 #include <vector>
 #include <string>
 
-#include "include/person.hpp"
-#include "include/mahasiswa.hpp"
-#include "include/dosen.hpp"
-#include "include/tendik.hpp"
+#include "include/person.h"
+#include "include/mahasiswa.h"
+#include "include/dosen.h"
+#include "include/tendik.h"
 
 using namespace std;
 
@@ -41,6 +41,10 @@ mahasiswa AddMahasiswa(int id){
 	return mahasiswa(to_string(id), nama, dd, mm, yy, nrp, departemen, tahunMasuk);
 }
 
+dosen AddDosen(int id){
+
+}
+
 int main(int argc, char** argv)
 {
 	vector<mahasiswa> recMhs;
@@ -52,8 +56,6 @@ int main(int argc, char** argv)
 	system("clear");
 
 	while(1) {
-		
-
 		cout << "Selamat datang di Universitas X" << endl << endl;
 		cout << "Data statistik:" << endl;
 		cout << "  1. Jumlah Mahasiswa             : " << recMhs.size() << " mahasiswa" << endl;
