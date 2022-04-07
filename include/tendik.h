@@ -1,8 +1,8 @@
-#ifndef __TENDIK_HPP__
-#define __TENDIK_HPP__
+#ifndef __TENDIK_CLASS
+#define __TENDIK_CLASS
 
 #include <iostream>
-#include "include/person.hpp"
+#include "include/person.h"
 
 
 class tendik : public person {
@@ -13,9 +13,9 @@ private:
 public:
 	tendik(std::string id, std::string nama, int dd, int mm, int yy, std::string npp, std::string unit);
 
-	void setUnit(std::string unit);
-	std::string getUnit();	
-	std::string getNPP();	
+	void setUnit(std::string _unit){unit = _unit;};
+	std::string getUnit(){return unit;};	
+	std::string getNPP(){return npp;};	
 };
 
 #endif

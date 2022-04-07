@@ -1,5 +1,5 @@
-#ifndef __PERSON_HPP__
-#define __PERSON_HPP__
+#ifndef __PERSON_CLASS
+#define __PERSON_CLASS
 
 #include <iostream>
 
@@ -12,16 +12,15 @@ private:
 public:
 	person(std::string id, std::string nama, int dd, int mm, int yy);
 
-	void setId(std::string id);
-	std::string getId();
+	std::string getId(){return id;};
 
-	void setNama(std::string nama);
-	std::string getNama();
+	void setNama(std::string _nama){nama = _nama;};
+	std::string getNama(){return nama;};
 
-	void setTglLahir(int dd, int mm, int yy);
-	int getTglLahir();
-	int getBulanLahir();
-	int getTahunLahir();	
+	void setTglLahir(int _dd, int _mm, int _yy){dd = _dd; mm = _mm; yy = _yy;};
+	int getTglLahir(){return dd;};
+	int getBulanLahir(){return mm;};
+	int getTahunLahir(){return yy;};
 };
 
 
