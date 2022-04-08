@@ -59,6 +59,10 @@ public:
 	mahasiswa(std::string id, std::string nama, int dd, int mm, int yy,
 					std::string nrp, departements departemen, int tahunmasuk);
 
+	departements GetDepartemen(){return departemen;};
+	std::string GetNRP(){return nrp;};
+	int GetTahunMasuk(){return tahunmasuk;};
+
 	void setSemester(int _semesterke){semesterke = _semesterke;};
 	int getSemester(){return semesterke;};
 

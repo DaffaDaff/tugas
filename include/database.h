@@ -17,13 +17,21 @@ private:
 	std::vector<tendik> recTendik;
 
 public:
-    database(std::vector<mahasiswa> recMhs, std::vector<dosen> recDosen, std::vector<tendik> recTendik);
-    void AddMahasiswa(std::string id, std::string nama, int dd, int mm, int yy, std::string nrp, std::string departemen, int tahunmasuk);
-    void AddDosen();
+    database();
 
     std::vector<mahasiswa> GetRecMhs(){return recMhs;}
     std::vector<dosen> GetRecDosen(){return recDosen;}
     std::vector<tendik> GetRecTendik(){return recTendik;}
+
+    void AddMhs(mahasiswa _mahasiswa){recMhs.push_back(_mahasiswa);};
+    void AddDosen(dosen _dosen);
+    void AddTendik(tendik _tendik);
+
+    void Load();
+    void LoadMahasiwa();
+
+    void Save();
+    void SaveMahasiswa();
 };
 
 #endif

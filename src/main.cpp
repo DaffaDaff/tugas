@@ -10,6 +10,106 @@
 
 using namespace std;
 
+database* dat = new database();
+
+mahasiswa InputMahasiswa();
+dosen InputDosen();
+tendik InputTendik();
+departements SelectDepartment();
+
+int main()
+{
+	int menu_terpilih;
+
+	system("clear");
+	system("CLS");
+
+	while(1) {
+		cout << "Selamat datang di Universitas X" << endl << endl;
+		cout << "Data statistik:" << endl;
+		cout << "  1. Jumlah Mahasiswa             : " << dat->GetRecMhs().size() << endl;
+		cout << "  2. Jumlah Dosen                 : " << dat->GetRecDosen().size() << endl;
+		cout << "  3. Jumlah Tenaga Kependidikan   : " << dat->GetRecTendik().size() << endl;
+		cout << endl;
+		cout << "Menu: " << endl;
+		cout << "  1. Tambah Mahasiswa" << endl;
+		//cout << "  2. Tambah Dosen" << endl;
+		//cout << "  3. Tambah Tenaga Kependidikan" << endl;
+		//cout << "  4. Tampilkan semua Mahasiswa" << endl;
+		//cout << "  5. Tampilkan semua Dosen" << endl;
+		//cout << "  6. Tampilkan semua Tenaga Kependidikan" << endl;
+		cout << "-> Silahkan memilih salah satu: ";
+		cin >> menu_terpilih;
+
+		switch (menu_terpilih) {
+			case 1:
+				dat->AddMhs(InputMahasiswa());
+				dat->Save();
+				system("clear");
+				system("CLS");
+				cout << "Pembuatan Mahasiswa Baru Berhasil" << endl << endl;
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+		}
+	}
+
+	return 0;
+}
+
+mahasiswa InputMahasiswa(){
+	string nama, nrp;
+	int dd, mm, yy, tahunMasuk, departemenSelection;
+	departements departemen;
+
+	while(1){
+		system("clear");
+		system("CLS");
+		cout << "Masukkan Nama: ";
+		cin.ignore();
+		getline(cin, nama);
+		cout << endl << "Masukkan Tanggal Lahir(dd mm yy): ";
+		cin >> dd >> mm >> yy;
+		cout << "Masukkan NRP: ";
+		cin >> nrp;
+		cout << endl;
+		departemen = SelectDepartment();
+		cout << endl << "Masukkan Tahun Masuk: ";
+		cin >> tahunMasuk;
+
+		cout << endl << endl;
+		cout << "Nama: " << nama << endl;
+		cout << "Tanggal Lahir: " << dd << "-" << mm << "-" << yy << endl;
+		cout << "Departemen: " << departemen << endl;
+		cout << "Tahun Masuk: " << tahunMasuk << endl;
+		cout << endl << "Apakah Data Yang Dimasukkan Sudah Benar?(Y/N)" << endl;
+
+		char YN;
+		while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
+			cin >> YN;
+
+		if(YN == 'Y' || YN == 'y') break;
+	}
+
+	return mahasiswa("000", nama, dd, mm, yy, nrp, departemen, tahunMasuk);
+}
+
+dosen InputDosen(){
+
+}
+
+tendik InputTendik(){
+
+}
+
 departements SelectDepartment(){
 	while(1){
 		int departmentSelection;
@@ -52,102 +152,11 @@ departements SelectDepartment(){
 		cout << "36 Teknik Kimia Industri" << endl;
 		cout << "37 Teknik Instrumentasi" << endl;
 		cout << "38 Statistika Bisnis" << endl;
+		cout << endl << endl << "Pilih Departemen:";
 		cin >> departmentSelection;
+
+		departmentSelection--;
 
 		return (departements)departmentSelection;;
 	}
-}
-
-mahasiswa AddMahasiswa(){
-	string nama, nrp;
-	int dd, mm, yy, tahunMasuk, departemenSelection;
-	departements departemen;
-
-	while(1){
-		system("clear");
-		system("CLS");
-		cout << "Masukkan Nama: ";
-		cin >> nama;
-		cout << endl << "Masukkan Tanggal Lahir(dd mm yy): ";
-		cin >> dd >> mm >> yy;
-		cout << endl << "Pilih Departemen:" << endl;
-		departemen = SelectDepartment();
-		cout << endl << "Masukkan Tahun Masuk: ";
-		cin >> tahunMasuk;
-
-		cout << endl << endl;
-		cout << "Nama: " << nama << endl;
-		cout << "Tanggal Lahir: " << dd << "-" << mm << "-" << yy << endl;
-		cout << "Departemen: " << departemen << endl;
-		cout << "Tahun Masuk: " << tahunMasuk << endl;
-		cout << endl << "Apakah Data Yang Dimasukkan Sudah Benar?(Y/N)" << endl;
-
-		char YN;
-		while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
-			cin >> YN;
-
-		if(YN == 'Y' || YN == 'y') break;
-	}
-
-	return mahasiswa("000", nama, dd, mm, yy, nrp, departemen, tahunMasuk);
-}
-
-dosen AddDosen(){
-
-}
-
-tendik AddTendik(){
-
-}
-
-int main()
-{
-	vector<mahasiswa> recMhs;
-	vector<dosen> recDosen;
-	vector<tendik> recTendik;
-
-	database* dat = new database(recMhs, recDosen, recTendik);
-
-	int menu_terpilih;
-
-	system("clear");
-	system("CLS");
-
-	while(1) {
-		cout << "Selamat datang di Universitas X" << endl << endl;
-		cout << "Data statistik:" << endl;
-		cout << "  1. Jumlah Mahasiswa             : " << recMhs.size() << " mahasiswa" << endl;
-		cout << "  2. Jumlah Dosen                 : " << recDosen.size() << " mahasiswa" << endl;
-		cout << "  3. Jumlah Tenaga Kependidikan   : " << recTendik.size() << " mahasiswa" << endl;
-		cout << endl;
-		cout << "Menu: " << endl;
-		cout << "  1. Tambah Mahasiswa" << endl;
-		//cout << "  2. Tambah Dosen" << endl;
-		//cout << "  3. Tambah Tenaga Kependidikan" << endl;
-		//cout << "  4. Tampilkan semua Mahasiswa" << endl;
-		//cout << "  5. Tampilkan semua Dosen" << endl;
-		//cout << "  6. Tampilkan semua Tenaga Kependidikan" << endl;
-		cout << "-> Silahkan memilih salah satu: ";
-		cin >> menu_terpilih;
-
-		switch (menu_terpilih) {
-			case 1:
-				recMhs.push_back(AddMahasiswa());
-				system("clear");
-				cout << "Pembuatan Mahasiswa Baru Berhasil" << endl << endl;
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			case 5:
-				break;
-			case 6:
-				break;
-		}
-	}
-
-	return 0;
 }
