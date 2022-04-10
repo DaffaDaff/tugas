@@ -12,15 +12,15 @@ private:
 public:
 	person(std::string id, std::string nama, int dd, int mm, int yy);
 
-	std::string getId(){return id;};
+	std::string GetId(){return id;};
 
-	void setNama(std::string _nama){nama = _nama;};
-	std::string getNama(){return nama;};
+	void SetNama(std::string _nama){nama = _nama;};
+	std::string GetNama(){return nama;};
 
-	void setTglLahir(int _dd, int _mm, int _yy){dd = _dd; mm = _mm; yy = _yy;};
-	int getTglLahir(){return dd;};
-	int getBulanLahir(){return mm;};
-	int getTahunLahir(){return yy;};
+	void SetTglLahir(int _dd, int _mm, int _yy){ dd = _dd; mm = _mm; yy = _yy; };
+	int GetTglLahir(){ return dd; };
+	int GetBulanLahir(){ return mm; };
+	int GetTahunLahir(){ return yy; };
 };
 
 

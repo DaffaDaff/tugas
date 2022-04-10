@@ -12,20 +12,20 @@
 
 class database{
 private:
-    std::vector<mahasiswa> recMhs;
-	std::vector<dosen> recDosen;
-	std::vector<tendik> recTendik;
+    std::vector<mahasiswa> mhsVector;
+	std::vector<dosen> dosenVector;
+	std::vector<tendik> tendikVector;
 
 public:
     database();
 
-    std::vector<mahasiswa> GetRecMhs(){return recMhs;}
-    std::vector<dosen> GetRecDosen(){return recDosen;}
-    std::vector<tendik> GetRecTendik(){return recTendik;}
+    std::vector<mahasiswa> GetMhsVector(){return mhsVector;}
+    std::vector<dosen> GetDosenVector(){return dosenVector;}
+    std::vector<tendik> GetTendikVector(){return tendikVector;}
 
-    void AddMhs(mahasiswa _mahasiswa){recMhs.push_back(_mahasiswa);};
-    void AddDosen(dosen _dosen);
-    void AddTendik(tendik _tendik);
+    void AddMhs(mahasiswa _mahasiswa){mhsVector.push_back(_mahasiswa);};
+    void AddDosen(dosen _dosen){dosenVector.push_back(_dosen);};
+    void AddTendik(tendik _tendik){tendikVector.push_back(_tendik);};
 
     void Load();
     void LoadMahasiwa();

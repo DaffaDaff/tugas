@@ -16,13 +16,14 @@ void database::LoadMahasiwa(){
 
         std::string mhsDat = " ";
         while(std::getline(DataFile, mhsDat)){
-        	std::string id, nama, nrp, dd, mm, yy, tahunMasuk, departemen;
+        	std::string id, nama, nrp, dd, mm, yy, tahunMasuk, departemen, semester;
         
                 std::stringstream mhsDatStream(mhsDat);
                 std::string dat;
 
                 std::getline(mhsDatStream, dat, ' ');
                 id = dat;
+                std::getline(mhsDatStream, dat, '\"');
                 std::getline(mhsDatStream, dat, '\"');
                 nama = dat;
                 std::getline(mhsDatStream, dat, ' ');
@@ -38,8 +39,10 @@ void database::LoadMahasiwa(){
                 departemen = dat;
                 std::getline(mhsDatStream, dat, ' ');
                 tahunMasuk = dat;
+                std::getline(mhsDatStream, dat, ' ');
+                semester = dat;
 
-                AddMhs(mahasiswa(id, nama, std::stoi(dd), std::stoi(mm), std::stoi(yy), nrp, (departements)std::stoi(departemen), std::stoi(tahunMasuk)));
+                AddMhs( mahasiswa(id, nama, std::stoi(dd), std::stoi(mm), std::stoi(yy), nrp, (departements)std::stoi(departemen), std::stoi(tahunMasuk), std::stoi(semester)) );
         }
 
         DataFile.close();
@@ -52,15 +55,18 @@ void database::Save(){
 void database::SaveMahasiswa(){
         std::ofstream DataFile("data/mahasiswa.data");
 
-        for(unsigned int i = 0; i < recMhs.size(); i++){
-                DataFile << recMhs[i].getId() << " ";
-                DataFile << recMhs[i].getNama() << "\" ";
-                DataFile << recMhs[i].getTglLahir() << " ";
-                DataFile << recMhs[i].getBulanLahir() << " ";
-                DataFile << recMhs[i].getTahunLahir() << " ";
-                DataFile << recMhs[i].GetNRP() << " ";
-                DataFile << recMhs[i].GetDepartemen() << " ";
-                DataFile << recMhs[i].GetTahunMasuk() << " ";
+        for(unsigned int i = 0; i < mhsVector.size(); i++){
+                DataFile << mhsVector[i].GetId() << " \"";
+                DataFile << mhsVector[i].GetNama() << "\" ";
+                DataFile << mhsVector[i].GetTglLahir() << " ";
+                DataFile << mhsVector[i].GetBulanLahir() << " ";
+                DataFile << mhsVector[i].GetTahunLahir() << " ";
+                DataFile << mhsVector[i].GetNRP() << " ";
+                DataFile << mhsVector[i].GetDepartemen() << " ";
+                DataFile << mhsVector[i].GetTahunMasuk() << " ";
+                DataFile << mhsVector[i].GetSemester() << " ";
+
+                DataFile << std::endl;
         }
 
         DataFile.close();
