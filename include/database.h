@@ -33,9 +33,13 @@ public:
 
     void Load();
     void LoadMahasiwa();
+    void LoadDosen();
+    void LoadTendik();
 
     void Save();
     void SaveMahasiswa();
+    void SaveDosen();
+    void SaveTendik();
 };
 
 #endif

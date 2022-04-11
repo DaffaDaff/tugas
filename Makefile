@@ -10,3 +10,4 @@ sim: $(SOURCES:.cpp=.o)
 
 clean:
 	rm src/*.o
+	rm sim.exe

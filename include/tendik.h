@@ -13,9 +13,9 @@ private:
 public:
 	tendik(std::string id, std::string nama, int dd, int mm, int yy, std::string npp, std::string unit);
 
-	void setUnit(std::string _unit){unit = _unit;};
-	std::string getUnit(){return unit;};	
-	std::string getNPP(){return npp;};	
+	void SetUnit(std::string _unit){unit = _unit;};
+	std::string GetUnit(){return unit;};	
+	std::string GetNPP(){return npp;};	
 };
 
 #endif

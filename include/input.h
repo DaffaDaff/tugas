@@ -20,13 +20,19 @@ enum commands {
 
 namespace input{
     void StartMenu(database* dat);
+
     mahasiswa InputMahasiswa(std::string id);
     dosen InputDosen(std::string id);
     tendik InputTendik(std::string id);
+
     void ShowMahasiswa(database* data);
     void ShowDosen(database* data);
     void ShowTendik(database* data);
-    commands ShowMahasiswaData(mahasiswa* mhs);
+
+    commands ShowMahasiswaData(mahasiswa* _mahasiswa);
+    commands ShowDosenData(dosen* _dosen);
+    commands ShowTendikData(tendik* _tendik);
+
     departements SelectDepartment();
 
 }

@@ -7,10 +7,14 @@
 class dosen : public person {
 private:
 	std::string npp;
-	std::string departemen;
+	departements departemen;
 
 public:
-	dosen(std::string id, std::string nama, int dd, int mm, int yy, std::string npp, std::string departemen);
+	dosen(std::string id, std::string nama, int dd, int mm, int yy, std::string npp, departements departemen);
+
+	std::string GetNPP(){ return npp; };
+	departements GetDepartemen(){ return departemen; };
 };
+
 
 #endif 
