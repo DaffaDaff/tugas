@@ -12,15 +12,21 @@
 #include "include/dosen.h"
 #include "include/tendik.h"
 
+enum commands {
+    null,
+    erase,
+    close,
+};
+
 namespace input{
     void StartMenu(database* dat);
     mahasiswa InputMahasiswa(std::string id);
-    dosen InputDosen();
-    tendik InputTendik();
+    dosen InputDosen(std::string id);
+    tendik InputTendik(std::string id);
     void ShowMahasiswa(database* data);
     void ShowDosen(database* data);
     void ShowTendik(database* data);
-    void ShowMahasiswaData(mahasiswa* mhs);
+    commands ShowMahasiswaData(mahasiswa* mhs);
     departements SelectDepartment();
 
 }

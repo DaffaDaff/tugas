@@ -56,7 +56,7 @@ void database::SaveMahasiswa(){
         std::ofstream DataFile("data/mahasiswa.data");
 
         for(unsigned int i = 0; i < mhsVector.size(); i++){
-                DataFile << mhsVector[i].GetId() << " \"";
+                DataFile << i << " \"";
                 DataFile << mhsVector[i].GetNama() << "\" ";
                 DataFile << mhsVector[i].GetTglLahir() << " ";
                 DataFile << mhsVector[i].GetBulanLahir() << " ";

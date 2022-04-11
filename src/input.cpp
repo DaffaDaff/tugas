@@ -8,20 +8,21 @@ void input::StartMenu(database* data){
 	int menu_terpilih;
 
     utils::ClearScreen();
-	cout << "Selamat datang di Universitas" << endl << endl;
+	cout << "Selamat datang di Universitas" << endl;
+	utils::DividingLIne();
 	cout << "Data Statistik:" << endl;
 	cout << "  1. Jumlah Mahasiswa             : " << data->GetMhsVector().size() << endl;
 	cout << "  2. Jumlah Dosen                 : " << data->GetDosenVector().size() << endl;
-	cout << "  3. Jumlah Tenaga Kependidikan   : " << data->GetTendikVector().size() << endl;
-	cout << endl;
-	cout << "Menu: " << endl;
+	cout << "  3. Jumlah Tenaga Kependidikan   : " << data->GetTendikVector().size();
+	utils::DividingLIne();
+	cout << endl << "Menu: " << endl;
 	cout << "  1. Tambah Mahasiswa" << endl;
 	//cout << "  2. Tambah Dosen" << endl;
 	//cout << "  3. Tambah Tenaga Kependidikan" << endl;
 	cout << "  4. Tampilkan semua Mahasiswa" << endl;
 	//cout << "  5. Tampilkan semua Dosen" << endl;
 	//cout << "  6. Tampilkan semua Tenaga Kependidikan" << endl;
-	cout << "-> Silahkan memilih salah satu: ";
+	cout << endl << "-> Pilih Menu: ";
 	cin >> menu_terpilih;
 
 	switch (menu_terpilih) {
@@ -53,18 +54,18 @@ mahasiswa input::InputMahasiswa(string id){
 	while(1){
         utils::ClearScreen();
 		cout << "Tambah Mahasiswa Baru" << endl << endl;
-		cout << "Masukkan Nama: ";
+		cout << "-> Masukkan Nama: ";
 		cin.ignore();
 		getline(cin, nama);
-		cout << "Masukkan Tanggal Lahir(dd mm yy): ";
+		cout << "-> Masukkan Tanggal Lahir(dd mm yy): ";
 		cin >> dd >> mm >> yy;
-		cout << "Masukkan NRP: ";
+		cout << "-> Masukkan NRP: ";
 		cin >> nrp;
 		cout << endl;
 		departemen = SelectDepartment();
-		cout << "Masukkan Tahun Masuk: ";
+		cout << "-> Masukkan Tahun Masuk: ";
 		cin >> tahunMasuk;
-		cout << "Masukkan Semester Yang Sedang Dijalani: ";
+		cout << "-> Masukkan Semester Yang Sedang Dijalani: ";
 		cin >> semester;
 
 		utils::ClearScreen();
@@ -74,7 +75,7 @@ mahasiswa input::InputMahasiswa(string id){
 		cout << "Departemen: " << departemen << endl;
 		cout << "Tahun Masuk: " << tahunMasuk << endl;
 		cout << "Semester Ke: " << semester << endl;
-		cout << endl << "Apakah Data Yang Dimasukkan Sudah Benar?(Y/N) ";
+		cout << endl << "-> Apakah Data Yang Dimasukkan Sudah Benar?(Y/N) ";
 
 		char YN;
 		while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
@@ -93,31 +94,51 @@ mahasiswa input::InputMahasiswa(string id){
 	return mahasiswa(id, nama, dd, mm, yy, nrp, departemen, tahunMasuk, semester);
 }
 
-dosen input::InputDosen(){
+dosen input::InputDosen(string id){
 
 }
 
-tendik input::InputTendik(){
+tendik input::InputTendik(string id){
 
 }
 
 void input::ShowMahasiswa(database* data){
-    utils::ClearScreen();
+	while(1){
+		utils::ClearScreen();
 
-    int i;
-    for(i = 0; i < data->GetMhsVector().size(); i++){
-        cout << i + 1 << ".  ";
-        cout << data->GetMhsVector()[i].GetNama() << "  ";
-        cout << data->GetMhsVector()[i].GetNRP() << endl;
-    }
+		cout << "===============DATA MAHASISWA===============";
+		int i;
+		for(i = 0; i < data->GetMhsVector().size(); i++){
+			cout << i + 1 << ".  ";
+			cout << data->GetMhsVector()[i].GetNama() << "  ";
+			cout << data->GetMhsVector()[i].GetNRP() << endl;
+		}
 
-    cout << endl << "Pilih Mahasiswa: ";
+		cout << "99. Keluar" << endl;
+		cout << endl << "-> Pilih Mahasiswa: ";
 
-    int input;
-    cin >> input;
-    if(input <= i && input > 0){
-        ShowMahasiswaData(&data->GetMhsVector()[i - 1]);
-    }
+		int input;
+		commands output = null;
+		cin >> input;
+		if(input == 99) return;
+		if(input <= i && input > 0)
+			output = ShowMahasiswaData(&data->GetMhsVector()[input - 1]);
+
+		switch (output)
+		{
+		case commands::close:
+			return;
+			break;
+		
+		case commands::erase:
+			data->EraseMhsVector(input - 1);
+			data->Save();
+			break;
+
+		default:
+			break;
+		}
+	}
 }
 
 void input::ShowDosen(database* data){
@@ -128,34 +149,55 @@ void input:: ShowTendik(database* data){
 
 }
 
-void input::ShowMahasiswaData(mahasiswa* mhs){
-    utils::ClearScreen();
-    cout << "Nama: " << mhs->GetNama() << endl;
-    cout << "NRP: " << mhs->GetNRP() << endl;
-    cout << "Departemen: " << departementsStr[mhs->GetDepartemen()] << endl;
-    cout << "Tanggal Lahir: " << mhs->GetTglLahir() << "-" << mhs->GetBulanLahir() << "-" << mhs->GetTahunLahir() << endl;
-    cout << "Tahun Masuk: " << mhs->GetTahunMasuk() << endl;
-	cout << "Semester Ke: " << mhs->GetSemester() << endl;
-
-	
-    cout << endl << "Opsi: " << endl;
-	cout << "0. Keluar" << endl;
-
+commands input::ShowMahasiswaData(mahasiswa* mhs){
 	while(1){
-		int opsi;
-		cin >> opsi;
-		switch (opsi)
-		{
-		case 1:
+		utils::ClearScreen();
+		cout << "Nama: " << mhs->GetNama() << endl;
+		cout << "NRP: " << mhs->GetNRP() << endl;
+		cout << "Departemen: " << departementsStr[mhs->GetDepartemen()] << endl;
+		cout << "Tanggal Lahir: " << mhs->GetTglLahir() << "-" << mhs->GetBulanLahir() << "-" << mhs->GetTahunLahir() << endl;
+		cout << "Tahun Masuk: " << mhs->GetTahunMasuk() << endl;
+		cout << "Semester Ke: " << mhs->GetSemester() << endl;
+
+		
+		cout << endl << "Opsi: " << endl;
+		cout << "8. Hapus Data" << endl;
+		cout << "9. Kembali" << endl;
+		cout << "0. Keluar" << endl;
+
+		while(1){
+			int opsi;
+			cout << endl << "-> Pilih Opsi: ";
+			cin >> opsi;
+			switch (opsi)
+			{
+			case 1:
+				
+				break;
 			
-			break;
-		
-		case 0:
-			return;
-			break;
-		
-		default:
-			break;
+			case 8:
+				cout << endl << "-> Apakah Anda Yakin Ingin Menghapus Data Ini?(Y/N) ";
+
+				char YN;
+				while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
+					cin >> YN;
+
+				if(YN == 'N' || YN == 'n') break;
+				else
+					return commands::erase;
+
+				break;
+
+			case 9:
+				return commands::null;
+			
+			case 0:
+				return commands::close;
+				break;
+			
+			default:
+				break;
+			}
 		}
 	}
 }
