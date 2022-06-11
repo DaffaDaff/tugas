@@ -28,6 +28,7 @@ namespace input{
     Dosen* InputDosen(std::string id);
     Tendik* InputTendik(std::string id);
     MataKuliah* InputMataKuliah(std::string id);
+    FRS* InputFRS();
 
     void ShowMahasiswa(database* data);
     void ShowDosen(database* data);
@@ -37,6 +38,7 @@ namespace input{
     void PrintMahasiswa(database* data, int page);
     void PrintDosen(database* data, int page);
     void PrintTendik(database* data, int page);
+    void PrintFRS(Mahasiswa* data);
     void PrintMataKuliah(database* data, int page);
     void PrintKelasMataKuliah(MataKuliah* data);
 

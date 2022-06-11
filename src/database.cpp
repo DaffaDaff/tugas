@@ -134,7 +134,7 @@ void database::LoadMataKuliah(){
 
         std::string matkuldat = " ";
         while(std::getline(DataFile, matkuldat)){
-        	std::string id, nama, kode;
+        	std::string id, nama, kode, sks;
         
                 std::stringstream matkulDatStream(matkuldat);
                 std::string dat;
@@ -147,8 +147,10 @@ void database::LoadMataKuliah(){
                 std::getline(matkulDatStream, dat, ' ');
                 std::getline(matkulDatStream, dat, ' ');
                 kode = dat;
+                std::getline(matkulDatStream, dat, ' ');
+                sks = dat;
 
-                MataKuliah* matkul = new MataKuliah(id, nama, kode);
+                MataKuliah* matkul = new MataKuliah(id, nama, kode, std::stoi(sks));
 
                 std::getline(matkulDatStream, dat, '{');
                 while(dat != "}"){
@@ -230,7 +232,8 @@ void database::SaveMataKuliah(){
         for(unsigned int i = 0; i < mataKuliahVector.size(); i++){
                 DataFile << i << " \"";
                 DataFile << mataKuliahVector[i]->GetNama() << "\" ";
-                DataFile << mataKuliahVector[i]->GetKode() << " {";
+                DataFile << mataKuliahVector[i]->GetKode() << " ";
+                DataFile << mataKuliahVector[i]->GetSKS() << " {";
 
                 for(KelasMataKuliah* kelas: mataKuliahVector[i]->GetKelasVector()){
                         DataFile << "[";

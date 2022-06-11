@@ -190,6 +190,7 @@ Tendik* input::InputTendik(string id){
 
 MataKuliah* input::InputMataKuliah(string id){
 	string nama, kode;
+	int sks;
 
 	while(1){
         c_clrscr();
@@ -199,6 +200,8 @@ MataKuliah* input::InputMataKuliah(string id){
 		getline(cin, nama);
 		cout << "-> Masukkan Kode: ";
 		cin >> kode;
+		cout << "-> Masukkan Jumlaj SKS: ";
+		cin >> sks;
 
 		c_clrscr();
 		cout << "Tambah Mata Kuliah Baru" << endl << endl;
@@ -220,11 +223,46 @@ MataKuliah* input::InputMataKuliah(string id){
     cout << endl << "Pembuatan Mata Kuliah Baru Berhasil" << endl;
     Sleep(1000);
 	
-	MataKuliah* matkul = new MataKuliah(id, nama, kode);
+	MataKuliah* matkul = new MataKuliah(id, nama, kode, sks);
 
 	return matkul;
 }
 
+FRS* input::InputFRS(){
+	int semester, sks;
+
+	while(1){
+        c_clrscr();
+		cout << "Tambah FRS Baru" << endl << endl;
+		cout << "-> Masukkan Semester: ";
+		cin >> semester;
+		cout << "-> Masukkan Batas SKS: ";
+		cin >> sks;
+
+		c_clrscr();
+		cout << "Tambah FRS Baru" << endl << endl;
+		cout << "Semester  : " << semester << endl;
+		cout << "Batas SKS : " << sks << endl;
+		cout << endl << "-> Apakah Data Yang Dimasukkan Sudah Benar?(Y/N) ";
+
+		char YN;
+		while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
+			cin >> YN;
+
+		if(YN == 'Y' || YN == 'y') break;
+		else{
+			cout << endl << "Pembuatan FRS Baru Gagal";
+			Sleep(1000);
+		}
+	}
+    
+    cout << endl << "Pembuatan Mata Kuliah Baru Berhasil" << endl;
+    Sleep(1000);
+
+	FRS* frs = new FRS(semester, sks);
+
+	return frs;
+}
 
 void input::ShowMahasiswa(database* data){
 	int page = 0;
@@ -476,6 +514,60 @@ void input::PrintTendik(database* data, int page){
 	}
 }
 
+void input::PrintFRS(Mahasiswa* data){
+	int page = 0;
+
+	while(1){
+		c_clrscr();
+
+		FRS* frs =  data->GetFRSVector()[page];
+
+		cout << "===============DATA FRS===============" << endl << endl;
+
+		cout << page + 1 << " ";
+		cout << "Semester : " << frs->GetSemester() << "   ";
+		cout << "IPS : " << frs->GetIPS() << "   ";
+		cout << "SKS : "; 
+
+        if(data->GetFRSVector().size() != 0)        
+			cout << endl << "Halaman " << page + 1 << endl;
+       	
+		cout << "6. FRS Sebelumnya" << endl;
+		cout << "7. FRS Selanjutnya" << endl;
+		cout << "8. Tambah FRS" << endl;
+		cout << "0. Kembali" << endl;
+		cout << endl << "-> Pilih Menu: ";
+
+		int input;
+		cin >> input;
+
+		switch (input)
+		{
+		case 6:
+			if(page > 0) page--;
+			break;
+		
+		case 7:
+			if(page < data->GetFRSVector().size()) page++;
+
+		case 8:
+		{
+			FRS* frs = InputFRS();
+
+			data->AddFRS(frs);
+			break;
+		}
+		
+		case 0:
+			return;
+
+		default:
+
+			break;
+		}
+	}
+}
+
 void input::PrintMataKuliah(database* data, int page){
 	for(unsigned i = 0 + (5 * page); i < 5 * (page + 1); i++){
 		if(i >= data->GetMataKuliahVector().size()) break;
@@ -508,14 +600,15 @@ void input::ShowMahasiswaData(database* data, int index){
 	while(1){
 		c_clrscr();
 		cout << mhs << endl;
-		cout << "Nama: " << mhs->GetNama() << endl;
-		cout << "NRP: " << mhs->GetNRP() << endl;
-		cout << "Departemen: " << departements[mhs->GetDepartemen()] << endl;
-		cout << "Tanggal Lahir: " << mhs->GetTglLahir() << "-" << mhs->GetBulanLahir() << "-" << mhs->GetTahunLahir() << endl;
-		cout << "Tahun Masuk: " << mhs->GetTahunMasuk() << endl;
-		cout << "Semester Ke: " << mhs->GetSemester() << endl;
+		cout << "Nama          : " << mhs->GetNama() << endl;
+		cout << "NRP           : " << mhs->GetNRP() << endl;
+		cout << "Departemen    : " << departements[mhs->GetDepartemen()] << endl;
+		cout << "Tanggal Lahir : " << mhs->GetTglLahir() << "-" << mhs->GetBulanLahir() << "-" << mhs->GetTahunLahir() << endl;
+		cout << "Tahun Masuk   : " << mhs->GetTahunMasuk() << endl;
+		cout << "Semester Ke   : " << mhs->GetSemester() << endl;
 
 		cout << endl << "Opsi: " << endl;
+		cout << "1. Tampilkan FRS" << endl;
 		cout << "9. Hapus Data" << endl;
 		cout << "0. Kembali" << endl;
 
@@ -560,10 +653,10 @@ void input::ShowDosenData(database* data, int index){
 
 	while(1){
 		c_clrscr();
-		cout << "Nama: " << dosen->GetNama() << endl;
-		cout << "NPP: " << dosen->GetNPP() << endl;
-		cout << "Departemen: " << departements[dosen->GetDepartemen()] << endl;
-		cout << "Tanggal Lahir: " << dosen->GetTglLahir() << "-" << dosen->GetBulanLahir() << "-" << dosen->GetTahunLahir() << endl;
+		cout << "Nama           : " << dosen->GetNama() << endl;
+		cout << "NPP            : " << dosen->GetNPP() << endl;
+		cout << "Departemen     : " << departements[dosen->GetDepartemen()] << endl;
+		cout << "Tanggal Lahir  : " << dosen->GetTglLahir() << "-" << dosen->GetBulanLahir() << "-" << dosen->GetTahunLahir() << endl;
 
 		
 		cout << endl << "Opsi: " << endl;
@@ -611,10 +704,10 @@ void input::ShowTendikData(database* data, int index){
 
 	while(1){
 		c_clrscr();
-		cout << "Nama: " << tendik->GetNama() << endl;
-		cout << "NPP: " << tendik->GetNPP() << endl;
-		cout << "Departemen: " << tendik->GetUnit() << endl;
-		cout << "Tanggal Lahir: " << tendik->GetTglLahir() << "-" << tendik->GetBulanLahir() << "-" << tendik->GetTahunLahir() << endl;
+		cout << "Nama           : " << tendik->GetNama() << endl;
+		cout << "NPP            : " << tendik->GetNPP() << endl;
+		cout << "Departemen     : " << tendik->GetUnit() << endl;
+		cout << "Tanggal Lahir  : " << tendik->GetTglLahir() << "-" << tendik->GetBulanLahir() << "-" << tendik->GetTahunLahir() << endl;
 
 		
 		cout << endl << "Opsi: " << endl;
@@ -662,8 +755,9 @@ void input::ShowMataKuliahData(database* data, int index){
 
 	while(1){
 		c_clrscr();
-		cout << "Nama: " << matkul->GetNama() << endl;
-		cout << "NPP: " << matkul->GetKode() << endl;
+		cout << "Nama       : " << matkul->GetNama() << endl;
+		cout << "Kode       : " << matkul->GetKode() << endl;
+		cout << "Jumlah SKS : " << matkul->GetSKS() << endl;
 		
 		cout << endl << "Opsi: " << endl;
 		cout << "1. Tampilkan Kelas" << endl;

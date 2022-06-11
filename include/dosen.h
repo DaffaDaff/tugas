@@ -17,8 +17,8 @@ private:
 public:
 	Dosen(std::string id, std::string nama, int dd, int mm, int yy, std::string npp, int departemen);
 
-	std::string& GetNPP(){ return npp; };
-	int& GetDepartemen(){ return departemen; };
+	std::string& GetNPP(){ return npp; }
+	int& GetDepartemen(){ return departemen; }
 	std::vector<MataKuliah*>& GetMataKuliahVector() { return matkulVector; }
 
 	void AddMataKuliah(MataKuliah* matkul) { matkulVector.push_back(matkul); }

@@ -12,9 +12,11 @@ using namespace std;
 
 class Mahasiswa;
 class Dosen;
+class MataKuliah;
 
 class KelasMataKuliah{
     private:
+        MataKuliah* matkul;
         int kode;
         int batasMhs;
 
@@ -22,7 +24,7 @@ class KelasMataKuliah{
         vector<Mahasiswa*> mahasiswaVector;
 
     public:
-        KelasMataKuliah(int kode, int batas);
+        KelasMataKuliah(MataKuliah* matkul, int kode, int batas);
 
         int& GetKode() { return kode; }
         int& GetBatas() { return batasMhs; }
@@ -39,15 +41,17 @@ class MataKuliah{
         string id;
         string nama;
         string kode;
+        int sks;
 
         vector<KelasMataKuliah*> kelasVector;
 
     public:
-        MataKuliah(string id, string nama, string kode);
+        MataKuliah(string id, string nama, string kode, int sks);
 
         string GetID() { return id; }
         string GetNama() { return nama; }
         string GetKode() { return kode; }
+        int GetSKS() {return sks; }
         vector<KelasMataKuliah*>& GetKelasVector() { return kelasVector; }
 
         void GenerateKelas(int batas);
