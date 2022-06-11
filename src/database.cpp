@@ -1,6 +1,3 @@
-#include <fstream>
-#include <sstream>
-
 #include "include/database.h"
 
 database::database(){
@@ -11,10 +8,13 @@ void database::Load(){
         LoadMahasiwa();
         LoadDosen();
         LoadTendik();
+        LoadMataKuliah();
 }
 
 void database::LoadMahasiwa(){
-        std::ifstream DataFile("data/mahasiswa.data");
+        mhsVector.clear();
+
+        std::ifstream DataFile("data/Mahasiswa.data");
 
         std::string mhsDat = " ";
         while(std::getline(DataFile, mhsDat)){
@@ -44,13 +44,17 @@ void database::LoadMahasiwa(){
                 std::getline(mhsDatStream, dat, ' ');
                 semester = dat;
 
-                AddMhs( mahasiswa(id, nama, std::stoi(dd), std::stoi(mm), std::stoi(yy), nrp, (departements)std::stoi(departemen), std::stoi(tahunMasuk), std::stoi(semester)) );
+                Mahasiswa* mahasiswa = new Mahasiswa(id, nama, std::stoi(dd), std::stoi(mm), std::stoi(yy), nrp, std::stoi(departemen), std::stoi(tahunMasuk), std::stoi(semester));
+
+                mhsVector.push_back(mahasiswa);
         }
 
         DataFile.close();
 }
 
 void database::LoadDosen(){
+        dosenVector.clear();
+
         std::ifstream DataFile("data/dosen.data");
 
         std::string dosenDat = " ";
@@ -76,14 +80,18 @@ void database::LoadDosen(){
                 npp = dat;
                 std::getline(dosenDatStream, dat, ' ');
                 departemen = dat;
+                
+                Dosen* dosen = new Dosen(id, nama, std::stoi(dd), std::stoi(mm), std::stoi(yy), npp, std::stoi(departemen));
 
-                AddDosen( dosen(id, nama, std::stoi(dd), std::stoi(mm), std::stoi(yy), npp, (departements)std::stoi(departemen)) );
+                dosenVector.push_back(dosen);
         }
 
         DataFile.close();
 }
 
 void database::LoadTendik(){
+        tendikVector.clear();
+
         std::ifstream DataFile("data/tendik.data");
 
         std::string tendikDat = " ";
@@ -111,7 +119,43 @@ void database::LoadTendik(){
                 std::getline(tendikDatStream, dat, '\"');
                 unit = dat;
 
-                AddTendik( tendik(id, nama, std::stoi(dd), std::stoi(mm), std::stoi(yy), npp, unit) );
+                Tendik* tendik = new Tendik(id, nama, std::stoi(dd), std::stoi(mm), std::stoi(yy), npp, unit);
+
+                tendikVector.push_back(tendik);
+        }
+
+        DataFile.close();
+}
+
+void database::LoadMataKuliah(){
+        mataKuliahVector.clear();
+
+        std::ifstream DataFile("data/matakuliah.data");
+
+        std::string matkuldat = " ";
+        while(std::getline(DataFile, matkuldat)){
+        	std::string id, nama, kode;
+        
+                std::stringstream matkulDatStream(matkuldat);
+                std::string dat;
+
+                std::getline(matkulDatStream, dat, ' ');
+                id = dat;
+                std::getline(matkulDatStream, dat, '\"');
+                std::getline(matkulDatStream, dat, '\"');
+                nama = dat;
+                std::getline(matkulDatStream, dat, ' ');
+                std::getline(matkulDatStream, dat, ' ');
+                kode = dat;
+
+                MataKuliah* matkul = new MataKuliah(id, nama, kode);
+
+                std::getline(matkulDatStream, dat, '{');
+                while(dat != "}"){
+                        std::getline(matkulDatStream, dat, '{');
+                }
+
+                mataKuliahVector.push_back(matkul);
         }
 
         DataFile.close();
@@ -121,6 +165,7 @@ void database::Save(){
         SaveMahasiswa();
         SaveDosen();
         SaveTendik();
+        SaveMataKuliah();
 }
 
 void database::SaveMahasiswa(){
@@ -128,14 +173,14 @@ void database::SaveMahasiswa(){
 
         for(unsigned int i = 0; i < mhsVector.size(); i++){
                 DataFile << i << " \"";
-                DataFile << mhsVector[i].GetNama() << "\" ";
-                DataFile << mhsVector[i].GetTglLahir() << " ";
-                DataFile << mhsVector[i].GetBulanLahir() << " ";
-                DataFile << mhsVector[i].GetTahunLahir() << " ";
-                DataFile << mhsVector[i].GetNRP() << " ";
-                DataFile << mhsVector[i].GetDepartemen() << " ";
-                DataFile << mhsVector[i].GetTahunMasuk() << " ";
-                DataFile << mhsVector[i].GetSemester() << " ";
+                DataFile << mhsVector[i]->GetNama() << "\" ";
+                DataFile << mhsVector[i]->GetTglLahir() << " ";
+                DataFile << mhsVector[i]->GetBulanLahir() << " ";
+                DataFile << mhsVector[i]->GetTahunLahir() << " ";
+                DataFile << mhsVector[i]->GetNRP() << " ";
+                DataFile << mhsVector[i]->GetDepartemen() << " ";
+                DataFile << mhsVector[i]->GetTahunMasuk() << " ";
+                DataFile << mhsVector[i]->GetSemester() << " ";
 
                 DataFile << std::endl;
         }
@@ -148,12 +193,12 @@ void database::SaveDosen(){
 
         for(unsigned int i = 0; i < dosenVector.size(); i++){
                 DataFile << i << " \"";
-                DataFile << dosenVector[i].GetNama() << "\" ";
-                DataFile << dosenVector[i].GetTglLahir() << " ";
-                DataFile << dosenVector[i].GetBulanLahir() << " ";
-                DataFile << dosenVector[i].GetTahunLahir() << " ";
-                DataFile << dosenVector[i].GetNPP() << " ";
-                DataFile << dosenVector[i].GetDepartemen() << " ";
+                DataFile << dosenVector[i]->GetNama() << "\" ";
+                DataFile << dosenVector[i]->GetTglLahir() << " ";
+                DataFile << dosenVector[i]->GetBulanLahir() << " ";
+                DataFile << dosenVector[i]->GetTahunLahir() << " ";
+                DataFile << dosenVector[i]->GetNPP() << " ";
+                DataFile << dosenVector[i]->GetDepartemen() << " ";
 
                 DataFile << std::endl;
         }
@@ -165,13 +210,35 @@ void database::SaveTendik(){
         std::ofstream DataFile("data/tendik.data");
 
         for(unsigned int i = 0; i < tendikVector.size(); i++){
+                DataFile << i << "\"";
+                DataFile << tendikVector[i]->GetNama() << "\" ";
+                DataFile << tendikVector[i]->GetTglLahir() << " ";
+                DataFile << tendikVector[i]->GetBulanLahir() << " ";
+                DataFile << tendikVector[i]->GetTahunLahir() << " ";
+                DataFile << tendikVector[i]->GetNPP() << " \"";
+                DataFile << tendikVector[i]->GetUnit() << "\" ";
+
+                DataFile << std::endl;
+        }
+
+        DataFile.close();
+}
+
+void database::SaveMataKuliah(){
+        std::ofstream DataFile("data/matakuliah.data");
+
+        for(unsigned int i = 0; i < mataKuliahVector.size(); i++){
                 DataFile << i << " \"";
-                DataFile << tendikVector[i].GetNama() << "\" ";
-                DataFile << tendikVector[i].GetTglLahir() << " ";
-                DataFile << tendikVector[i].GetBulanLahir() << " ";
-                DataFile << tendikVector[i].GetTahunLahir() << " ";
-                DataFile << tendikVector[i].GetNPP() << " \"";
-                DataFile << tendikVector[i].GetUnit() << "\" ";
+                DataFile << mataKuliahVector[i]->GetNama() << "\" ";
+                DataFile << mataKuliahVector[i]->GetKode() << " {";
+
+                for(KelasMataKuliah* kelas: mataKuliahVector[i]->GetKelasVector()){
+                        DataFile << "[";
+                        DataFile << kelas->GetKode() << " ";
+                        DataFile << kelas->GetBatas() << " ";
+                }
+
+                DataFile << "}";
 
                 DataFile << std::endl;
         }

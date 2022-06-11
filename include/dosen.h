@@ -1,19 +1,27 @@
 #ifndef __DOSEN_CLASS
 #define __DOSEN_CLASS
+#pragma once
 
 #include <iostream>
 #include "include/person.h"
+#include "include/matakuliah.h"
 
-class dosen : public person {
+class MataKuliah;
+
+class Dosen : public Person {
 private:
 	std::string npp;
-	departements departemen;
+	int departemen;
+	std::vector<MataKuliah*> matkulVector;
 
 public:
-	dosen(std::string id, std::string nama, int dd, int mm, int yy, std::string npp, departements departemen);
+	Dosen(std::string id, std::string nama, int dd, int mm, int yy, std::string npp, int departemen);
 
-	std::string GetNPP(){ return npp; };
-	departements GetDepartemen(){ return departemen; };
+	std::string& GetNPP(){ return npp; };
+	int& GetDepartemen(){ return departemen; };
+	std::vector<MataKuliah*>& GetMataKuliahVector() { return matkulVector; }
+
+	void AddMataKuliah(MataKuliah* matkul) { matkulVector.push_back(matkul); }
 };
 
 

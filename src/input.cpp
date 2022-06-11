@@ -1,62 +1,56 @@
-#include <windows.h>
-
 #include "include/input.h"
 
 using namespace std;
 
 void input::StartMenu(database* data){
-	int menu_terpilih;
+	while(1){
+		int menu_terpilih;
 
-    utils::ClearScreen();
-	cout << "Selamat datang di Universitas" << endl;
-	utils::DividingLIne();
-	cout << "Data Statistik:" << endl;
-	cout << "  1. Jumlah Mahasiswa             : " << data->GetMhsVector().size() << endl;
-	cout << "  2. Jumlah Dosen                 : " << data->GetDosenVector().size() << endl;
-	cout << "  3. Jumlah Tenaga Kependidikan   : " << data->GetTendikVector().size();
-	utils::DividingLIne();
-	cout << endl << "Menu: " << endl;
-	cout << "  1. Tambah Mahasiswa" << endl;
-	cout << "  2. Tambah Dosen" << endl;
-	cout << "  3. Tambah Tenaga Kependidikan" << endl;
-	cout << "  4. Tampilkan semua Mahasiswa" << endl;
-	cout << "  5. Tampilkan semua Dosen" << endl;
-	cout << "  6. Tampilkan semua Tenaga Kependidikan" << endl;
-	cout << endl << "-> Pilih Menu: ";
-	cin >> menu_terpilih;
+		c_clrscr();
+		cout << "Selamat datang di Universitas" << endl;
+		utils::DividingLIne();
+		cout << "Data Statistik:" << endl;
+		cout << "  Jumlah Mahasiswa             : " << data->GetMhsVector().size() << endl;
+		cout << "  Jumlah Dosen                 : " << data->GetDosenVector().size() << endl;
+		cout << "  Jumlah Tenaga Kependidikan   : " << data->GetTendikVector().size() << endl;
+		cout << "  Jumlah Mata Kuliah           : " << data->GetMataKuliahVector().size();
+		utils::DividingLIne();
+		cout << endl << "Menu: " << endl;
+		cout << "  1. Tampilkan Mahasiswa" << endl;
+		cout << "  2. Tampilkan Dosen" << endl;
+		cout << "  3. Tampilkan Tenaga Kependidikan" << endl;
+		cout << "  4. Tampilkan Mata Kuliah" << endl;
+		cout << "  0. Keluar" << endl;
+		cout << endl << "-> Pilih Menu: ";
+		cin >> menu_terpilih;
 
-	switch (menu_terpilih) {
-		case 1:
-			data->AddMhs(input::InputMahasiswa( to_string(data->GetMhsVector().size()) ));
-			data->Save();
-			break;
-		case 2:
-			data->AddDosen(input::InputDosen( to_string(data->GetDosenVector().size()) ));
-			data->Save();
-			break;
-		case 3:
-			data->AddTendik(input::InputTendik(to_string(data->GetTendikVector().size()) ));
-			data->Save();
-			break;
-		case 4:
-            ShowMahasiswa(data);
-			break;
-		case 5:
-			ShowDosen(data);
-			break;
-		case 6:
-			ShowTendik(data);
-			break;
+		switch (menu_terpilih) {
+			case 1:
+				ShowMahasiswa(data);
+				break;
+			case 2:
+				ShowDosen(data);
+				break;
+			case 3:
+				ShowTendik(data);
+				break;
+			case 4:
+				ShowMataKuliah(data);
+				break;
+			case 0:
+				c_clrscr();
+				return;
+		}
 	}
 }
 
-mahasiswa input::InputMahasiswa(string id){
+
+Mahasiswa* input::InputMahasiswa(string id){
 	string nama, nrp;
-	int dd, mm, yy, tahunMasuk, departemenSelection, semester;
-	departements departemen;
+	int dd, mm, yy, tahunMasuk, departemen, semester;
 
 	while(1){
-        utils::ClearScreen();
+        c_clrscr();
 		cout << "Tambah Mahasiswa Baru" << endl << endl;
 		cout << "-> Masukkan Nama: ";
 		cin.ignore();
@@ -72,7 +66,7 @@ mahasiswa input::InputMahasiswa(string id){
 		cout << "-> Masukkan Semester Yang Sedang Dijalani: ";
 		cin >> semester;
 
-		utils::ClearScreen();
+		c_clrscr();
 		cout << "Tambah Dosen Baru" << endl << endl;
 		cout << "Nama: " << nama << endl;
 		cout << "Tanggal Lahir: " << dd << "-" << mm << "-" << yy << endl;
@@ -96,16 +90,21 @@ mahasiswa input::InputMahasiswa(string id){
     cout << endl << "Pembuatan Mahasiswa Baru Berhasil" << endl;
     Sleep(1000);
 
-	return mahasiswa(id, nama, dd, mm, yy, nrp, departemen, tahunMasuk, semester);
+	Mahasiswa* mahasiswa = new Mahasiswa(id, nama, dd, mm, yy, nrp, departemen, tahunMasuk, semester);
+
+	cout << mahasiswa << endl;
+
+	c_getch();
+
+	return mahasiswa;
 }
 
-dosen input::InputDosen(string id){
+Dosen* input::InputDosen(string id){
 	string nama, npp;
-	int dd, mm, yy, departmentSelection;
-	departements departement;
+	int dd, mm, yy, departemen;
 
 	while(1){
-        utils::ClearScreen();
+        c_clrscr();
 		cout << "Tambah Dosen Baru" << endl << endl;
 		cout << "-> Masukkan Nama: ";
 		cin.ignore();
@@ -115,14 +114,14 @@ dosen input::InputDosen(string id){
 		cout << "-> Masukkan NPP: ";
 		cin >> npp;
 		cout << endl;
-		departement = SelectDepartment();
+		departemen = SelectDepartment();
 
-		utils::ClearScreen();
+		c_clrscr();
 		cout << "Tambah Mahasiswa Baru" << endl << endl;
 		cout << "Nama: " << nama << endl;
 		cout << "Tanggal Lahir: " << dd << "-" << mm << "-" << yy << endl;
 		cout << "NPP: " << npp << endl;
-		cout << "Departemen: " << departement << endl;
+		cout << "Departemen: " << departemen << endl;
 		cout << endl << "-> Apakah Data Yang Dimasukkan Sudah Benar?(Y/N) ";
 
 		char YN;
@@ -138,16 +137,18 @@ dosen input::InputDosen(string id){
     
     cout << endl << "Pembuatan Dosen Baru Berhasil" << endl;
     Sleep(1000);
+
+	Dosen* dosen = new Dosen(id, nama, dd, mm, yy, npp, departemen);
 	
-	return dosen(id, nama, dd, mm, yy, npp, departement);
+	return dosen;
 }
 
-tendik input::InputTendik(string id){
+Tendik* input::InputTendik(string id){
 	string nama, npp, unit;
 	int dd, mm, yy;
 
 	while(1){
-        utils::ClearScreen();
+        c_clrscr();
 		cout << "Tambah Tendik Baru" << endl << endl;
 		cout << "-> Masukkan Nama: ";
 		cin.ignore();
@@ -160,7 +161,7 @@ tendik input::InputTendik(string id){
 		cin.ignore();
 		getline(cin, unit);
 
-		utils::ClearScreen();
+		c_clrscr();
 		cout << "Tambah Tendik Baru" << endl << endl;
 		cout << "Nama: " << nama << endl;
 		cout << "Tanggal Lahir: " << dd << "-" << mm << "-" << yy << endl;
@@ -182,270 +183,557 @@ tendik input::InputTendik(string id){
     cout << endl << "Pembuatan Tendik Baru Berhasil" << endl;
     Sleep(1000);
 	
-	return tendik(id, nama, dd, mm, yy, npp, unit);
+	Tendik* tendik = new Tendik(id, nama, dd, mm, yy, npp, unit);
+
+	return tendik;
 }
 
-void input::ShowMahasiswa(database* data){
+MataKuliah* input::InputMataKuliah(string id){
+	string nama, kode;
+
 	while(1){
-		utils::ClearScreen();
+        c_clrscr();
+		cout << "Tambah Mata Kuliah Baru" << endl << endl;
+		cout << "-> Masukkan Nama: ";
+		cin.ignore();
+		getline(cin, nama);
+		cout << "-> Masukkan Kode: ";
+		cin >> kode;
 
-		cout << "===============DATA MAHASISWA===============";
-		int i;
-		for(i = 0; i < data->GetMhsVector().size(); i++){
-			cout << i + 1 << ".  ";
-			cout << data->GetMhsVector()[i].GetNama() << "  ";
-			cout << data->GetMhsVector()[i].GetNRP() << endl;
+		c_clrscr();
+		cout << "Tambah Mata Kuliah Baru" << endl << endl;
+		cout << "Nama: " << nama << endl;
+		cout << "Kode: " << kode << endl;
+		cout << endl << "-> Apakah Data Yang Dimasukkan Sudah Benar?(Y/N) ";
+
+		char YN;
+		while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
+			cin >> YN;
+
+		if(YN == 'Y' || YN == 'y') break;
+		else{
+			cout << endl << "Pembuatan Mata Kuliah Baru Gagal";
+			Sleep(1000);
 		}
+	}
+    
+    cout << endl << "Pembuatan Mata Kuliah Baru Berhasil" << endl;
+    Sleep(1000);
+	
+	MataKuliah* matkul = new MataKuliah(id, nama, kode);
 
-		cout << "0. Keluar" << endl;
-		cout << endl << "-> Pilih Mahasiswa: ";
+	return matkul;
+}
+
+
+void input::ShowMahasiswa(database* data){
+	int page = 0;
+
+	while(1){
+		c_clrscr();
+
+		cout << "===============DATA MAHASISWA===============" << endl << endl;
+		
+		PrintMahasiswa(data, page);
+
+        if(data->GetMhsVector().size() != 0)
+	        cout << endl << "Halaman " << page + 1 << endl;
+       	
+		cout << "6. Halaman Sebelumnya" << endl;
+		cout << "7. Halaman Selanjutnya" << endl;
+		cout << "8. Tambah Mahasiswa" << endl;
+		cout << "0. Kembali" << endl;
+		cout << endl << "-> Pilih Menu: ";
 
 		int input;
-		commands output = null;
 		cin >> input;
-		if(input == 0) return;
-		if(input <= i && input > 0)
-			output = ShowMahasiswaData(&data->GetMhsVector()[input - 1]);
 
-		switch (output)
+		switch (input)
 		{
-		case commands::close:
-			return;
+		case 6:
+			if(page > 0) page--;
 			break;
 		
-		case commands::erase:
-			data->EraseMhsVector(input - 1);
+		case 7:
+			if(page < data->GetMhsVector().size() / 5) page++;
+		
+		case 8:
+		{
+			Mahasiswa* mahasiswa = InputMahasiswa( to_string(data->GetMhsVector().size()) );
+
+			data->AddMhs(mahasiswa);
 			data->Save();
+
 			break;
+		}
+		
+		case 0:
+			return;
 
 		default:
+			if(input < 1 || input > 5) break;
+
+			ShowMahasiswaData(data, input + (5 * page) - 1);
+
 			break;
 		}
 	}
 }
 
 void input::ShowDosen(database* data){
+	int page = 0;
+
 	while(1){
-		utils::ClearScreen();
+		c_clrscr();
 
-		cout << "===============DATA DOSEN===============";
-		int i;
-		for(i = 0; i < data->GetDosenVector().size(); i++){
-			cout << i + 1 << ".  ";
-			cout << data->GetDosenVector()[i].GetNama() << "  ";
-			cout << data->GetDosenVector()[i].GetNPP() << endl;
-		}
+		cout << "===============DATA DOSEN===============" << endl << endl;
 
-		cout << "0. Keluar" << endl;
-		cout << endl << "-> Pilih Dosen: ";
+		PrintDosen(data, page);
+
+        if(data->GetDosenVector().size() != 0)
+	        cout << endl << "Halaman " << page + 1 << endl;
+       	
+		cout << "6. Halaman Sebelumnya" << endl;
+		cout << "7. Halaman Selanjutnya" << endl;
+		cout << "8. Tambah Dosen" << endl;
+		cout << "0. Kembali" << endl;
+		cout << endl << "-> Pilih Menu: ";
 
 		int input;
-		commands output = null;
 		cin >> input;
-		if(input == 0) return;
-		if(input <= i && input > 0)
-			output = ShowDosenData(&data->GetDosenVector()[input - 1]);
 
-		switch (output)
+		switch (input)
 		{
-		case commands::close:
-			return;
+		case 6:
+			if(page > 0) page--;
 			break;
 		
-		case commands::erase:
-			data->EraseDosenVector(input - 1);
+		case 7:
+			if(page < data->GetDosenVector().size() / 5) page++;
+
+		case 8:
+		{
+			Dosen* dosen = InputDosen( to_string(data->GetDosenVector().size()) );
+
+			data->AddDosen(dosen);
 			data->Save();
 			break;
+		}
+		
+		case 0:
+			return;
 
+		default:
+			if(input < 1 || input > 5) break;
+
+			ShowDosenData(data, input + (5 * page) - 1);
+
+			break;
+		}
+	}
+}
+
+void input::ShowTendik(database* data){
+	int page = 0;
+
+	while(1){
+		c_clrscr();
+
+		cout << "===============DATA TENDIK===============" << endl << endl;
+
+		PrintTendik(data, page);
+
+        if(data->GetTendikVector().size() != 0)
+	        cout << endl << "Halaman " << page + 1 << endl;
+       	
+		cout << "6. Halaman Sebelumnya" << endl;
+		cout << "7. Halaman Selanjutnya" << endl;
+		cout << "8. Tambah Tenaga Kependidikan" << endl;
+		cout << "0. Kembali" << endl;
+		cout << endl << "-> Pilih Menu: ";
+
+		int input;
+		cin >> input;
+
+		switch (input)
+		{
+		case 6:
+			if(page > 0) page--;
+			break;
+		
+		case 7:
+			if(page < data->GetTendikVector().size() / 5) page++;
+
+		case 8:
+		{
+			Tendik* tendik = InputTendik(to_string(data->GetTendikVector().size()) );
+
+			data->AddTendik(tendik);
+			data->Save();
+			break;
+		}
+		
+		case 0:
+			return;
+
+		default:
+			if(input < 1 || input > 5) break;
+
+			ShowTendikData(data, input + (5 * page) - 1);
+
+			break;
+		}
+	}
+}
+
+void input::ShowMataKuliah(database* data){
+	int page = 0;
+
+	while(1){
+		c_clrscr();
+
+		cout << "===============DATA MATA KULIAH===============" << endl << endl;
+
+		PrintMataKuliah(data, page);
+
+        if(data->GetMataKuliahVector().size() != 0)
+	        cout << endl << "Halaman " << page + 1 << endl;
+       	
+		cout << "6. Halaman Sebelumnya" << endl;
+		cout << "7. Halaman Selanjutnya" << endl;
+		cout << "8. Tambah Mata Kuliah" << endl;
+		cout << "0. Kembali" << endl;
+		cout << endl << "-> Pilih Menu: ";
+
+		int input;
+		cin >> input;
+
+		switch (input)
+		{
+		case 6:
+			if(page > 0) page--;
+			break;
+		
+		case 7:
+			if(page < data->GetMataKuliahVector().size() / 5) page++;
+
+		case 8:
+		{
+			MataKuliah* matkul = InputMataKuliah(to_string(data->GetMataKuliahVector().size()) );
+
+			data->AddMataKuliah(matkul);
+			data->Save();
+			break;
+		}
+		
+		case 0:
+			return;
+
+		default:
+			if(input < 1 || input > 5) break;
+
+			ShowMataKuliahData(data, input + (5 * page) - 1);
+
+			break;
+		}
+	}
+}
+
+
+void input::PrintMahasiswa(database* data, int page){
+	for(unsigned i = 0 + (5 * page); i < 5 * (page + 1); i++){
+		if(i >= data->GetMhsVector().size()) break;
+
+		Mahasiswa* mhs = data->GetMhsVector()[i];
+
+		cout << i + 1 - (5 * page) << ". \"";
+		cout << mhs->GetNama() << "\" ";
+		cout << mhs->GetNRP() << endl;
+	}
+}
+
+void input::PrintDosen(database* data, int page){
+	for(unsigned i = 0 + (5 * page); i < 5 * (page + 1); i++){
+		if(i >= data->GetDosenVector().size()) break;
+
+		Dosen* dosen = data->GetDosenVector()[i];
+
+		cout << i + 1 - (5 * page) << ". \"";
+		cout << dosen->GetNama() << "\" ";
+		cout << dosen->GetNPP() << endl;
+	}
+}
+
+void input::PrintTendik(database* data, int page){
+	for(unsigned i = 0 + (5 * page); i < 5 * (page + 1); i++){
+		if(i >= data->GetTendikVector().size()) break;
+
+		Tendik* tendik = data->GetTendikVector()[i];
+
+		cout << i + 1 - (5 * page) << ". \"";
+		cout << tendik->GetNama() << "\" ";
+		cout << tendik->GetNPP() << endl;
+	}
+}
+
+void input::PrintMataKuliah(database* data, int page){
+	for(unsigned i = 0 + (5 * page); i < 5 * (page + 1); i++){
+		if(i >= data->GetMataKuliahVector().size()) break;
+
+		MataKuliah* matkul = data->GetMataKuliahVector()[i];
+		
+		cout << i + 1 - (5 * page) << ". ";
+		cout << matkul->GetKode() << " \"";
+		cout << matkul->GetNama() << "\" " << endl;
+		
+	}
+}
+
+void input::PrintKelasMataKuliah(MataKuliah* data){
+	for(unsigned i = 0; i < data->GetKelasVector().size(); i++){
+		KelasMataKuliah* kelas = data->GetKelasVector()[i];
+
+		cout << i << ". ";
+		cout << kelas->GetKode() << " \"";
+		cout << (!kelas->GetDosenVector().empty() ? kelas->GetDosenVector().front()->GetNama() : " ") << "\" ";
+		cout << kelas->GetMahasiswaVector().size() << "/";
+		cout << kelas->GetBatas() << endl;
+	}
+}
+
+
+void input::ShowMahasiswaData(database* data, int index){
+	Mahasiswa* mhs = data->GetMhsVector()[index];
+
+	while(1){
+		c_clrscr();
+		cout << mhs << endl;
+		cout << "Nama: " << mhs->GetNama() << endl;
+		cout << "NRP: " << mhs->GetNRP() << endl;
+		cout << "Departemen: " << departements[mhs->GetDepartemen()] << endl;
+		cout << "Tanggal Lahir: " << mhs->GetTglLahir() << "-" << mhs->GetBulanLahir() << "-" << mhs->GetTahunLahir() << endl;
+		cout << "Tahun Masuk: " << mhs->GetTahunMasuk() << endl;
+		cout << "Semester Ke: " << mhs->GetSemester() << endl;
+
+		cout << endl << "Opsi: " << endl;
+		cout << "9. Hapus Data" << endl;
+		cout << "0. Kembali" << endl;
+
+		int input;
+		cout << endl << "-> Pilih Opsi: ";
+		cin >> input;
+		switch (input)
+		{
+		case 9:
+			cout << endl << "-> Apakah Anda Yakin Ingin Menghapus Data Ini?(Y/N) ";
+
+            char YN;
+            cin >> YN;
+
+            if(YN != 'Y' && YN != 'y') break;
+
+			data->GetMhsVector().erase(data->GetMhsVector().begin() + index);
+
+			data->SaveMahasiswa();
+			data->LoadMahasiwa();
+
+			c_clrscr();
+ 
+            cout << "Data Berhasil Dihapus" << endl << endl;
+            cout << "Klik Untuk Melanjutkan";
+
+            c_getch();
+
+			return;
+
+		case 0:
+			return;
+			
+		default:
+			break;
+		}			
+	}
+}
+
+void input::ShowDosenData(database* data, int index){
+	Dosen *dosen = data->GetDosenVector()[index];
+
+	while(1){
+		c_clrscr();
+		cout << "Nama: " << dosen->GetNama() << endl;
+		cout << "NPP: " << dosen->GetNPP() << endl;
+		cout << "Departemen: " << departements[dosen->GetDepartemen()] << endl;
+		cout << "Tanggal Lahir: " << dosen->GetTglLahir() << "-" << dosen->GetBulanLahir() << "-" << dosen->GetTahunLahir() << endl;
+
+		
+		cout << endl << "Opsi: " << endl;
+		cout << "9. Hapus Data" << endl;
+		cout << "0. Kembali" << endl;
+
+		int input;
+		cout << endl << "-> Pilih Opsi: ";
+		cin >> input;
+		switch (input)
+		{
+		case 9:
+			cout << endl << "-> Apakah Anda Yakin Ingin Menghapus Data Ini?(Y/N) ";
+
+            char YN;
+            cin >> YN;
+
+            if(YN != 'Y' && YN != 'y') break;
+
+			data->GetDosenVector().erase(data->GetDosenVector().begin() + index);
+
+			data->SaveDosen();
+			data->LoadDosen();
+
+			c_clrscr();
+ 
+            cout << "Data Berhasil Dihapus" << endl << endl;
+            cout << "Klik Untuk Melanjutkan";
+
+            c_getch();
+
+			return;
+
+		case 0:
+			return;
+			
 		default:
 			break;
 		}
 	}
 }
 
-void input:: ShowTendik(database* data){
+void input::ShowTendikData(database* data, int index){
+	Tendik *tendik = data->GetTendikVector()[index];
+
 	while(1){
-		utils::ClearScreen();
+		c_clrscr();
+		cout << "Nama: " << tendik->GetNama() << endl;
+		cout << "NPP: " << tendik->GetNPP() << endl;
+		cout << "Departemen: " << tendik->GetUnit() << endl;
+		cout << "Tanggal Lahir: " << tendik->GetTglLahir() << "-" << tendik->GetBulanLahir() << "-" << tendik->GetTahunLahir() << endl;
 
-		cout << "===============DATA TENDIK===============";
-		int i;
-		for(i = 0; i < data->GetTendikVector().size(); i++){
-			cout << i + 1 << ".  ";
-			cout << data->GetTendikVector()[i].GetNama() << "  ";
-			cout << data->GetTendikVector()[i].GetNPP() << endl;
-		}
-
-		cout << "0. Keluar" << endl;
-		cout << endl << "-> Pilih Tendik: ";
+		
+		cout << endl << "Opsi: " << endl;
+		cout << "9. Hapus Data" << endl;
+		cout << "0. Kembali" << endl;
 
 		int input;
-		commands output = null;
+		cout << endl << "-> Pilih Opsi: ";
 		cin >> input;
-		if(input == 0) return;
-		if(input <= i && input > 0)
-			output = ShowTendikData(&data->GetTendikVector()[input - 1]);
-
-		switch (output)
+		switch (input)
 		{
-		case commands::close:
-			return;
-			break;
-		
-		case commands::erase:
-			data->EraseTendikVector(input - 1);
-			data->Save();
-			break;
+		case 9:
+			cout << endl << "-> Apakah Anda Yakin Ingin Menghapus Data Ini?(Y/N) ";
 
+            char YN;
+            cin >> YN;
+
+            if(YN != 'Y' && YN != 'y') break;
+
+			data->GetTendikVector().erase(data->GetTendikVector().begin() + index);
+
+			data->SaveTendik();
+			data->LoadTendik();
+
+			c_clrscr();
+ 
+            cout << "Data Berhasil Dihapus" << endl << endl;
+            cout << "Klik Untuk Melanjutkan";
+
+            c_getch();
+
+			return;
+
+		case 0:
+			return;
+			
 		default:
 			break;
 		}
 	}
 }
 
-commands input::ShowMahasiswaData(mahasiswa* _mahasiswa){
-	while(1){
-		utils::ClearScreen();
-		cout << "Nama: " << _mahasiswa->GetNama() << endl;
-		cout << "NRP: " << _mahasiswa->GetNRP() << endl;
-		cout << "Departemen: " << departementsStr[_mahasiswa->GetDepartemen()] << endl;
-		cout << "Tanggal Lahir: " << _mahasiswa->GetTglLahir() << "-" << _mahasiswa->GetBulanLahir() << "-" << _mahasiswa->GetTahunLahir() << endl;
-		cout << "Tahun Masuk: " << _mahasiswa->GetTahunMasuk() << endl;
-		cout << "Semester Ke: " << _mahasiswa->GetSemester() << endl;
+void input::ShowMataKuliahData(database* data, int index){ 
+	MataKuliah *matkul = data->GetMataKuliahVector()[index];
 
+	while(1){
+		c_clrscr();
+		cout << "Nama: " << matkul->GetNama() << endl;
+		cout << "NPP: " << matkul->GetKode() << endl;
 		
 		cout << endl << "Opsi: " << endl;
-		cout << "1. Hapus Data" << endl;
-		cout << "9. Kembali" << endl;
-		cout << "0. Keluar" << endl;
+		cout << "1. Tampilkan Kelas" << endl;
+		cout << "2. Buat Kelas Baru" << endl;
+		cout << "9. Hapus Data" << endl;
+		cout << "0. Kembali" << endl;
 
-		while(1){
-			int opsi;
-			cout << endl << "-> Pilih Opsi: ";
-			cin >> opsi;
-			switch (opsi)
-			{
-			case 1:
-				cout << endl << "-> Apakah Anda Yakin Ingin Menghapus Data Ini?(Y/N) ";
+		int input;
+		cout << endl << "-> Pilih Opsi: ";
+		cin >> input;
+		switch (input)
+		{
+		case 1:
+			c_clrscr();
 
-				char YN;
-				while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
-					cin >> YN;
+			PrintKelasMataKuliah(matkul);
 
-				if(YN == 'N' || YN == 'n') break;
-				else
-					return commands::erase;
+			cout << endl << "Klik Untuk Kembali";
+			c_getch();
 
-				break;
+			break;
 
-			case 9:
-				return commands::null;
+		case 2:
+			c_clrscr();
+
+			int batas;
+
+			cout << "->Tentukan Batas Mahasiswa ";
+			cin >> batas;
+
+			matkul->GenerateKelas(batas);
+
+			cout << endl << "Pembuatan Kelas Baru Berhasil" << endl;
+    		Sleep(1000);
+
+			break;
+
+		case 9:
+			cout << endl << "-> Apakah Anda Yakin Ingin Menghapus Data Ini?(Y/N) ";
+
+            char YN;
+            cin >> YN;
+
+            if(YN != 'Y' && YN != 'y') break;
+
+			data->GetMataKuliahVector().erase(data->GetMataKuliahVector().begin() + index);
+
+			data->SaveMataKuliah();
+			data->LoadMataKuliah();
+
+			c_clrscr();
+ 
+            cout << "Data Berhasil Dihapus" << endl << endl;
+            cout << "Klik Untuk Melanjutkan";
+
+            c_getch();
+
+			return;
+
+		case 0:
+			return;
 			
-			case 0:
-				return commands::close;
-				break;
-			
-			default:
-				break;
-			}
+		default:
+			break;
 		}
 	}
 }
 
-commands input::ShowDosenData(dosen* _dosen){
-	while(1){
-		utils::ClearScreen();
-		cout << "Nama: " << _dosen->GetNama() << endl;
-		cout << "NPP: " << _dosen->GetNPP() << endl;
-		cout << "Departemen: " << departementsStr[_dosen->GetDepartemen()] << endl;
-		cout << "Tanggal Lahir: " << _dosen->GetTglLahir() << "-" << _dosen->GetBulanLahir() << "-" << _dosen->GetTahunLahir() << endl;
 
-		
-		cout << endl << "Opsi: " << endl;
-		cout << "1. Hapus Data" << endl;
-		cout << "9. Kembali" << endl;
-		cout << "0. Keluar" << endl;
-
-		while(1){
-			int opsi;
-			cout << endl << "-> Pilih Opsi: ";
-			cin >> opsi;
-			switch (opsi)
-			{
-			case 1:
-				cout << endl << "-> Apakah Anda Yakin Ingin Menghapus Data Ini?(Y/N) ";
-
-				char YN;
-				while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
-					cin >> YN;
-
-				if(YN == 'N' || YN == 'n') break;
-				else
-					return commands::erase;
-
-				break;
-
-			case 9:
-				return commands::null;
-			
-			case 0:
-				return commands::close;
-				break;
-			
-			default:
-				break;
-			}
-		}
-	}
-}
-
-commands input::ShowTendikData(tendik* _tendik){
-	while(1){
-		utils::ClearScreen();
-		cout << "Nama: " << _tendik->GetNama() << endl;
-		cout << "NPP: " << _tendik->GetNPP() << endl;
-		cout << "Departemen: " << _tendik->GetUnit() << endl;
-		cout << "Tanggal Lahir: " << _tendik->GetTglLahir() << "-" << _tendik->GetBulanLahir() << "-" << _tendik->GetTahunLahir() << endl;
-
-		
-		cout << endl << "Opsi: " << endl;
-		cout << "1. Hapus Data" << endl;
-		cout << "9. Kembali" << endl;
-		cout << "0. Keluar" << endl;
-
-		while(1){
-			int opsi;
-			cout << endl << "-> Pilih Opsi: ";
-			cin >> opsi;
-			switch (opsi)
-			{
-			case 1:
-				cout << endl << "-> Apakah Anda Yakin Ingin Menghapus Data Ini?(Y/N) ";
-
-				char YN;
-				while(YN != 'Y' && YN != 'y' && YN != 'N' && YN != 'n')
-					cin >> YN;
-
-				if(YN == 'N' || YN == 'n') break;
-				else
-					return commands::erase;
-
-				break;
-
-			case 9:
-				return commands::null;
-			
-			case 0:
-				return commands::close;
-				break;
-			
-			default:
-				break;
-			}
-		}
-	}
-}
-
-departements input::SelectDepartment(){
+int input::SelectDepartment(){
 	while(1){
 		int departmentSelection;
 
@@ -492,6 +780,6 @@ departements input::SelectDepartment(){
 
 		departmentSelection--;
 
-		return (departements)departmentSelection;;
+		return departmentSelection;;
 	}
 }

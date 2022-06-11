@@ -1,7 +1,6 @@
-#include <iostream>
 #include "include/person.h"
 
-std::string departementsStr[38] = {
+std::string departements[38] = {
 	"Fisika",
 	"Matematika",
 	"Statistika",
@@ -42,7 +41,5 @@ std::string departementsStr[38] = {
 	"Statistika Bisnis"
 };
 
-person::person(std::string id, std::string nama, int dd, int mm, int yy)
-		: id(id), nama(nama), dd(dd), mm(mm), yy(yy)
-{
+Person::Person(std::string id, std::string nama, int dd, int mm, int yy) : id(id), nama(nama), dd(dd), mm(mm), yy(yy){
 }
